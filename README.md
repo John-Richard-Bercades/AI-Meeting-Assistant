@@ -1,1 +1,1 @@
-# AI-Meeting-Assistant
+# meeting-assistantv2

@@ -1,1 +1,1 @@
-# meeting-assistantv2
+# Development of Front-End of Multi-Platform Application on our thesis

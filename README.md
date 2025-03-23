@@ -1,1 +1,1 @@
-# Development of Front-End of Multi-Platform Application on our thesis
+# Development of the Front-End for a Multi-Platform Application Using React and Electron

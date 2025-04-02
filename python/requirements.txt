@@ -1,0 +1,24 @@
+deep-translator>=1.11.1
+flask==2.0.1
+flask-cors==3.0.10
+werkzeug==2.0.1
+python-dotenv==0.19.0
+numpy==1.24.3
+ml-dtypes==0.2.0
+tensorflow==2.14.0
+tensorflow-intel==2.14.0; platform_system == "Windows"
+keras==2.14.0
+numba>=0.61.0
+tensorboard==2.14.0
+jax>=0.4.30
+jaxlib>=0.4.30
+gast>=0.4.0
+transformer-smaller-training-vocab>=0.2.3
+flair==0.15.1
+librosa>=0.10.1
+pyannote.audio>=3.1.1
+soundfile>=0.12.1
+torch>=2.1.0
+noisereduce>=3.0.0
+SpeechRecognition>=3.10.0
+tqdm>=4.65.0

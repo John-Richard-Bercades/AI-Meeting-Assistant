@@ -1,0 +1,39 @@
+# First, upgrade pip
+pip install --upgrade pip
+
+# Core dependencies first
+pip install numpy==1.24.3
+pip install ml-dtypes==0.2.0
+
+# Install PyTorch (GPU version for Windows)
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+
+# TensorFlow and related packages
+pip install tensorflow==2.14.0
+pip install tensorflow-intel==2.14.0; python_platform == "win32"
+pip install keras==2.14.0
+pip install tensorboard==2.14.0
+pip install gast>=0.4.0
+
+# JAX (after TensorFlow)
+pip install "jax[cuda11_pip]" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
+pip install jaxlib>=0.4.30
+
+# Audio processing (after core dependencies)
+pip install librosa>=0.10.1
+pip install soundfile>=0.12.1
+pip install noisereduce>=3.0.0
+pip install SpeechRecognition>=3.10.0
+
+# NLP and Translation
+pip install transformers>=4.30.0
+pip install deep-translator>=1.11.1
+pip install transformer-smaller-training-vocab>=0.2.3
+
+# Additional Dependencies
+pip install numba>=0.61.0
+pip install tqdm>=4.65.0
+pip install flair==0.15.1
+
+# Install pyannote.audio last
+pip install pyannote.audio>=3.1.1

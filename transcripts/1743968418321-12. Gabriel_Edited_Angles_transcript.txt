@@ -1,0 +1,7 @@
+Speaker 1: Hello and welcome to the meeting.
+Speaker 2: Thank you for joining us today.
+Speaker 1: Let's discuss the agenda for today.
+Speaker 2: We have several items to cover.
+Speaker 1: First, let's talk about the project status.
+Speaker 2: The project is progressing well.
+Speaker 1: Great, let's move on to the next item.

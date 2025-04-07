@@ -14,8 +14,8 @@ const platform = {
   },
 
   processAudio: async (file, callbacks = {}) => {
-    const { onProgress, onStage } = callbacks;
-    
+    const { onProgress, onStage, metadata = {} } = callbacks;
+
     try {
       // Validate file
       if (!file) {
@@ -30,12 +30,17 @@ const platform = {
       const formData = new FormData();
       formData.append('file', file);
 
+      // Add metadata if provided
+      if (metadata.userId) formData.append('userId', metadata.userId);
+      if (metadata.title) formData.append('title', metadata.title);
+      if (metadata.description) formData.append('description', metadata.description);
+
       console.log('Sending file to server:', {
         name: file.name,
         size: file.size,
         type: file.type
       });
-      
+
       const response = await fetch(`${API_BASE_URL}/process-audio`, {
         method: 'POST',
         body: formData,

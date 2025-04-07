@@ -17,9 +17,9 @@ import RecordSaved from "./components/RecordSaved";
 import ConversationList from "./components/ConversationList";
 import Conversation from "./components/Conversation";
 
-// Meeting Minutes Components
-import MeetingMinutesList from "./components/MeetingMinutesList";
-import MeetingMinutes from "./components/MeetingMinutes";
+// Minutes Components
+import MinutesList from "./components/MinutesList";
+import Minutes from "./components/Minutes";
 
 // Add Platform Context
 const PlatformContext = React.createContext();
@@ -115,19 +115,19 @@ const App = () => {
             </ProtectedRoute>
           } />
 
-          {/* Meeting Minutes Routes */}
-          <Route path="/meeting-minutes" element={
+          {/* Minutes Routes */}
+          <Route path="/minutes" element={
             <ProtectedRoute>
               <PageLayout>
-                <MeetingMinutesList />
+                <MinutesList />
               </PageLayout>
             </ProtectedRoute>
           } />
 
-          <Route path="/meeting-minutes/:id" element={
+          <Route path="/minutes/:id" element={
             <ProtectedRoute>
               <PageLayout>
-                <MeetingMinutes />
+                <Minutes />
               </PageLayout>
             </ProtectedRoute>
           } />

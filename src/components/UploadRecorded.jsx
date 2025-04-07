@@ -86,6 +86,9 @@ const UploadRecorded = () => {
   const [processingStatus, setProcessingStatus] = useState('');
   const [uploadProgress, setUploadProgress] = useState(0);
   const [processingStage, setProcessingStage] = useState('');
+  const [isServerAvailable, setIsServerAvailable] = useState(false);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
 
   // Combine both server checks into one useEffect
   useEffect(() => {
@@ -102,7 +105,7 @@ const UploadRecorded = () => {
         console.error('Server connection error:', error);
       }
     };
-    
+
     checkServerConnection();
   }, []); // Removed dependency array to run only once
 
@@ -178,6 +181,14 @@ const UploadRecorded = () => {
         throw new Error(`Unsupported file type: ${fileExtension}`);
       }
 
+      // Get user ID from localStorage
+      const userId = localStorage.getItem('userId');
+
+      // Validate title
+      if (!title.trim()) {
+        throw new Error('Please enter a title for this minute');
+      }
+
       const result = await platform.processAudio(file, {
         onProgress: (progress) => {
           setUploadProgress(progress);
@@ -185,6 +196,11 @@ const UploadRecorded = () => {
         },
         onStage: (stage) => {
           setProcessingStage(stage);
+        },
+        metadata: {
+          userId,
+          title,
+          description
         }
       });
 
@@ -211,10 +227,10 @@ const UploadRecorded = () => {
   };
 
   return (
-    <div className="page-container" style={{ 
-      display: 'flex', 
-      height: '100vh', 
-      fontFamily: "'Montserrat', sans-serif", 
+    <div className="page-container" style={{
+      display: 'flex',
+      height: '100vh',
+      fontFamily: "'Montserrat', sans-serif",
       overflow: 'hidden',
       position: 'relative', // Added for absolute positioning of background elements
     }}>
@@ -232,7 +248,7 @@ const UploadRecorded = () => {
         animation: 'backgroundShift 30s linear infinite',
         zIndex: 0,
       }} />
-      
+
       <div style={{
         position: 'absolute',
         top: 0,
@@ -246,11 +262,11 @@ const UploadRecorded = () => {
       {/* Main Content */}
       <Sidebar style={{ position: 'relative', zIndex: 2 }} />
 
-      <div style={{ 
+      <div style={{
         marginLeft: '320px',
-        flex: 1, 
-        display: 'flex', 
-        flexDirection: 'column', 
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
         padding: '30px',
         position: 'relative',
         zIndex: 2,
@@ -258,7 +274,7 @@ const UploadRecorded = () => {
         overflowY: 'auto'
       }}>
         {/* Header Section */}
-        <div style={{ 
+        <div style={{
           background: 'rgba(255, 255, 255, 0.95)',
           padding: '20px 30px',
           borderRadius: '15px',
@@ -268,14 +284,14 @@ const UploadRecorded = () => {
           alignItems: 'center',
           backdropFilter: 'blur(10px)',
         }}>
-          <div style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
             cursor: 'pointer',
             padding: '8px',
             borderRadius: '8px',
             transition: 'all 0.3s ease',
-          }} 
+          }}
           onClick={() => navigate(-1)}
           onMouseOver={(e) => e.currentTarget.style.background = 'rgba(3, 79, 175, 0.1)'}
           onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}>
@@ -290,10 +306,10 @@ const UploadRecorded = () => {
             />
             <span style={{ color: '#034FAF', fontWeight: '600' }}>Back</span>
           </div>
-          <h1 style={{ 
-            margin: '0 auto', 
-            fontSize: "24px", 
-            fontWeight: "900", 
+          <h1 style={{
+            margin: '0 auto',
+            fontSize: "24px",
+            fontWeight: "900",
             color: '#034FAF',
             letterSpacing: '1px',
           }}>
@@ -342,20 +358,20 @@ const UploadRecorded = () => {
               style={{ display: 'none' }}
               accept="video/*,audio/*"
             />
-            
-            <img 
-              src={uploadIcon} 
-              alt="Upload Icon" 
-              style={{ 
-                height: '120px', 
+
+            <img
+              src={uploadIcon}
+              alt="Upload Icon"
+              style={{
+                height: '120px',
                 marginBottom: '30px',
                 transition: 'transform 0.3s ease',
                 filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1))',
               }}
             />
-            
+
             {error && (
-              <div style={{ 
+              <div style={{
                 color: '#ff4444',
                 background: 'rgba(255, 68, 68, 0.1)',
                 padding: '12px 24px',
@@ -369,7 +385,7 @@ const UploadRecorded = () => {
               </div>
             )}
 
-            <div style={{ 
+            <div style={{
               textAlign: 'center',
               color: '#666',
             }}>
@@ -380,7 +396,7 @@ const UploadRecorded = () => {
                   borderRadius: '12px',
                   width: '100%',
                 }}>
-                  <p style={{ 
+                  <p style={{
                     margin: '0 0 10px 0',
                     color: '#034FAF',
                     fontWeight: '600',
@@ -388,7 +404,7 @@ const UploadRecorded = () => {
                   }}>
                     {file.name}
                   </p>
-                  <p style={{ 
+                  <p style={{
                     margin: 0,
                     color: '#666',
                     fontSize: '14px',
@@ -398,7 +414,7 @@ const UploadRecorded = () => {
                 </div>
               ) : (
                 <>
-                  <p style={{ 
+                  <p style={{
                     margin: '0 0 15px 0',
                     fontSize: '18px',
                     fontWeight: '600',
@@ -406,7 +422,7 @@ const UploadRecorded = () => {
                   }}>
                     Drag and drop your file here
                   </p>
-                  <p style={{ 
+                  <p style={{
                     margin: '0 0 20px 0',
                     fontSize: '16px',
                   }}>
@@ -437,7 +453,7 @@ const UploadRecorded = () => {
           </div>
 
           {isProcessing && (
-            <ProcessingIndicator 
+            <ProcessingIndicator
               progress={uploadProgress}
               stage={processingStage}
               status={processingStatus}
@@ -467,10 +483,91 @@ const UploadRecorded = () => {
             </div>
           )}
 
+          {/* Metadata Form */}
+          {file && !isProcessing && !uploadResponse && (
+            <div style={{
+              marginTop: '30px',
+              width: '100%',
+              maxWidth: '800px',
+              padding: '20px',
+              backgroundColor: 'white',
+              borderRadius: '12px',
+              boxShadow: '0 4px 15px rgba(0, 0, 0, 0.05)',
+            }}>
+              <h3 style={{
+                color: '#034FAF',
+                marginTop: 0,
+                marginBottom: '20px',
+                fontSize: '18px',
+                fontWeight: '700',
+              }}>Meeting Information</h3>
+
+              <div style={{ marginBottom: '20px' }}>
+                <label
+                  htmlFor="title"
+                  style={{
+                    display: 'block',
+                    marginBottom: '8px',
+                    fontWeight: '600',
+                    color: '#034FAF'
+                  }}
+                >
+                  Title *
+                </label>
+                <input
+                  id="title"
+                  type="text"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  placeholder="Enter a title for this minute"
+                  style={{
+                    width: '100%',
+                    padding: '12px',
+                    borderRadius: '8px',
+                    border: '1px solid #ddd',
+                    fontSize: '16px',
+                    boxSizing: 'border-box'
+                  }}
+                  required
+                />
+              </div>
+
+              <div style={{ marginBottom: '20px' }}>
+                <label
+                  htmlFor="description"
+                  style={{
+                    display: 'block',
+                    marginBottom: '8px',
+                    fontWeight: '600',
+                    color: '#034FAF'
+                  }}
+                >
+                  Description
+                </label>
+                <textarea
+                  id="description"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder="Enter a description (optional)"
+                  style={{
+                    width: '100%',
+                    padding: '12px',
+                    borderRadius: '8px',
+                    border: '1px solid #ddd',
+                    fontSize: '16px',
+                    minHeight: '100px',
+                    resize: 'vertical',
+                    boxSizing: 'border-box'
+                  }}
+                />
+              </div>
+            </div>
+          )}
+
           {/* Action Buttons */}
-          <div style={{ 
-            display: 'flex', 
-            justifyContent: 'center', 
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
             gap: '20px',
             marginTop: '40px',
             width: '100%',
@@ -503,31 +600,31 @@ const UploadRecorded = () => {
               Cancel
             </button>
             <button
-              onClick={handleUpload}
-              disabled={!file || error || isProcessing}
+              onClick={() => handleUpload(file)}
+              disabled={!file || error || isProcessing || !title.trim()}
               style={{
                 padding: '15px 40px',
-                background: file && !error && !isProcessing
+                background: file && !error && !isProcessing && title.trim()
                   ? 'linear-gradient(45deg, #034FAF, #0367d4)'
                   : '#ccc',
                 color: 'white',
                 border: 'none',
                 borderRadius: '12px',
                 fontWeight: '600',
-                cursor: file && !error && !isProcessing ? 'pointer' : 'not-allowed',
+                cursor: file && !error && !isProcessing && title.trim() ? 'pointer' : 'not-allowed',
                 width: '200px',
                 transition: 'all 0.3s ease',
                 fontSize: '16px',
                 boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
               }}
               onMouseOver={(e) => {
-                if (file && !error && !isProcessing) {
+                if (file && !error && !isProcessing && title.trim()) {
                   e.target.style.transform = 'translateY(-2px)';
                   e.target.style.boxShadow = '0 6px 20px rgba(3, 79, 175, 0.3)';
                 }
               }}
               onMouseOut={(e) => {
-                if (file && !error && !isProcessing) {
+                if (file && !error && !isProcessing && title.trim()) {
                   e.target.style.transform = 'translateY(0)';
                   e.target.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.1)';
                 }

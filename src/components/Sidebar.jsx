@@ -19,7 +19,7 @@ const Sidebar = () => {
   const menuItems = [
     { name: 'Home', path: '/home', icon: homeIcon },
     { name: 'Transcriptions', path: '/transcriptions', icon: conversationIcon },
-    { name: 'Minutes of the Meeting', path: '/meeting-minutes', icon: minutesIcon }
+    { name: 'Minutes of the Meeting', path: '/minutes', icon: minutesIcon }
   ];
 
   return (
@@ -48,9 +48,9 @@ const Sidebar = () => {
                 className={`menu-item ${activeMenu === item.path ? 'active' : ''}`}
                 onClick={() => setActiveMenu(item.path)}
               >
-                <img 
-                  src={item.icon} 
-                  alt={item.name} 
+                <img
+                  src={item.icon}
+                  alt={item.name}
                   className="menu-icon"
                   style={{
                     filter: activeMenu === item.path ? 'brightness(0) invert(1)' : 'none'

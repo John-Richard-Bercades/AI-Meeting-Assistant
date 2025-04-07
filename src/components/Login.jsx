@@ -2,16 +2,59 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LOGO from '../assets/logo.png';
 import backIcon from '../assets/back.png';
+import { apiClient } from '../services/api';
 
 const Login = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault(); // Prevent form submission default behavior
-    localStorage.setItem('isAuthenticated', 'true');
-    navigate('/home', { replace: true }); // Use replace to prevent going back to login
+
+    if (!username || !password) {
+      setError('Please enter both username and password');
+      return;
+    }
+
+    setIsLoading(true);
+    setError('');
+
+    try {
+      // First test the connection to make sure server is running
+      await apiClient.testConnection();
+
+      // Make login request
+      const response = await fetch(`${apiClient.baseURL}/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+        credentials: 'include'
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.status === 'success') {
+        // Save user info in localStorage (but not authentication token, which is in the cookie)
+        localStorage.setItem('isAuthenticated', 'true');
+        localStorage.setItem('userId', data.user.id);
+        localStorage.setItem('username', data.user.username);
+
+        // Navigate to home
+        navigate('/home', { replace: true });
+      } else {
+        setError(data.error || 'Login failed. Please check your credentials.');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      setError('Connection error. Please make sure the server is running.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleBack = () => {
@@ -23,7 +66,7 @@ const Login = () => {
       <div className="luxury-bg"></div>
       <div className="gradient-overlay"></div>
       <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Playfair+Display:wght@400;500;600;700;800;900&family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-      
+
       <div className="content-wrapper">
         <main className="main-content">
           <div className="login-form">
@@ -50,8 +93,9 @@ const Login = () => {
                   placeholder="Enter your password"
                 />
               </div>
-              <button type="submit" className="login-btn">
-                Log In
+              {error && <div className="error-message">{error}</div>}
+              <button type="submit" className="login-btn" disabled={isLoading}>
+                {isLoading ? 'Logging in...' : 'Log In'}
               </button>
             </form>
             <div className="signup-section">
@@ -186,7 +230,7 @@ const Login = () => {
             left: 0;
             right: 0;
             bottom: 0;
-            background: 
+            background:
               linear-gradient(45deg, rgba(3, 79, 175, 0.1), rgba(87, 215, 226, 0.1)),
               url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23034FAF' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
             animation: backgroundShift 30s linear infinite;
@@ -208,7 +252,7 @@ const Login = () => {
             display: flex;
             flex-direction: column;
             flex: 1;
-            
+
           }
 
           @keyframes backgroundShift {
@@ -338,6 +382,25 @@ const Login = () => {
 
           .login-btn:active {
             transform: translateY(0);
+          }
+
+          .login-btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+          }
+
+          .error-message {
+            color: #ff6b6b;
+            background-color: rgba(255, 107, 107, 0.1);
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 15px;
+            width: 100%;
+            text-align: center;
+            font-size: 0.9rem;
           }
 
           .signup-section {

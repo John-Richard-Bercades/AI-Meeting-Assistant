@@ -21,7 +21,7 @@ class ApiClient {
     }
   }
 
-  async uploadFile(file) {
+  async uploadFile(file, userId, title, description = '') {
     try {
       // First, test the connection
       console.log('Testing server connection...');
@@ -39,6 +39,11 @@ class ApiClient {
       // Proceed with file upload
       const formData = new FormData();
       formData.append('file', file);
+
+      // Add metadata if provided
+      if (userId) formData.append('userId', userId);
+      if (title) formData.append('title', title);
+      if (description) formData.append('description', description);
 
       const uploadUrl = `${this.baseURL}/process-audio`;
       console.log('Uploading to:', uploadUrl, 'File size:', file.size);
@@ -84,5 +89,85 @@ class ApiClient {
     return window.electronAPI.processAudioFile(file.path);
   }
 }
+
+// Create a new minute with CSRF protection
+async function createMinute(userId, title, description, filePath, duration) {
+  try {
+    // Import here to avoid circular dependency
+    const { addCsrfToken } = await import('./csrfService');
+
+    // Get CSRF token and add to headers
+    const headers = await addCsrfToken({
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    });
+
+    const response = await fetch(`${this.baseURL}/minutes`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ userId, title, description, filePath, duration }),
+      credentials: 'include'
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || `Failed to create minute: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Create minute error:', error);
+    throw error;
+  }
+}
+
+// Get minutes for a user
+async function getMinutes(userId) {
+  try {
+    const response = await fetch(`${this.baseURL}/minutes/${userId}`, {
+      credentials: 'include',
+      headers: {
+        'Accept': 'application/json',
+      }
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || `Failed to get minutes: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Get minutes error:', error);
+    throw error;
+  }
+}
+
+// Get minute details
+async function getMinuteDetails(userId, minuteId) {
+  try {
+    const response = await fetch(`${this.baseURL}/minutes/${userId}/${minuteId}`, {
+      credentials: 'include',
+      headers: {
+        'Accept': 'application/json',
+      }
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || `Failed to get minute details: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Get minute details error:', error);
+    throw error;
+  }
+}
+
+// Add the methods to the ApiClient prototype
+ApiClient.prototype.createMinute = createMinute;
+ApiClient.prototype.getMinutes = getMinutes;
+ApiClient.prototype.getMinuteDetails = getMinuteDetails;
 
 export const apiClient = new ApiClient();

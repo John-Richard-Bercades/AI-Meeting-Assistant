@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import lspuLogo from '../assets/lspu_logo.png';
-import ccsLogo from '../assets/ccs_logo.png';
 import logo from '../assets/logo.png';
 import backIcon from '../assets/back.png';
+import { apiClient } from '../services/api';
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -15,6 +14,8 @@ const SignUp = () => {
     password: '',
     confirmPassword: ''
   });
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -23,30 +24,69 @@ const SignUp = () => {
     });
   };
 
-  const handleSignUp = () => {
+  const handleSignUp = async (e) => {
+    if (e) e.preventDefault();
+
     // Basic validation
-    if (!formData.firstName || !formData.lastName || !formData.email || 
+    if (!formData.firstName || !formData.lastName || !formData.email ||
         !formData.username || !formData.password || !formData.confirmPassword) {
-      alert('Please fill in all fields');
+      setError('Please fill in all fields');
       return;
     }
 
     // Password match validation
     if (formData.password !== formData.confirmPassword) {
-      alert('Passwords do not match');
+      setError('Passwords do not match');
       return;
     }
 
     // Email format validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
-      alert('Please enter a valid email address');
+      setError('Please enter a valid email address');
       return;
     }
 
-    console.log('Sign Up Data:', formData);
-    alert('Registration successful! Please login.');
-    navigate('/login');
+    setIsLoading(true);
+    setError('');
+
+    try {
+      // First test the connection to make sure server is running
+      await apiClient.testConnection();
+
+      // Make registration request
+      const response = await fetch(`${apiClient.baseURL}/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: formData.username,
+          password: formData.password,
+          email: formData.email,
+          firstName: formData.firstName,
+          lastName: formData.lastName
+        }),
+        credentials: 'include'
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.status === 'success') {
+        // Navigate to login page
+        navigate('/login', {
+          replace: true,
+          state: { message: 'Registration successful! Please log in.' }
+        });
+      } else {
+        setError(data.error || 'Registration failed. Please try again.');
+      }
+    } catch (error) {
+      console.error('Registration error:', error);
+      setError('Connection error. Please make sure the server is running.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleBack = () => {
@@ -129,8 +169,9 @@ const SignUp = () => {
                   />
                 </div>
               </div>
-              <button className="signup-btn" onClick={handleSignUp}>
-                Sign Up
+              {error && <div className="error-message">{error}</div>}
+              <button className="signup-btn" onClick={handleSignUp} disabled={isLoading}>
+                {isLoading ? 'Creating Account...' : 'Sign Up'}
               </button>
               <div className="login-section">
                 <p>Already have an account?</p>
@@ -176,7 +217,7 @@ const SignUp = () => {
             left: 0;
             right: 0;
             bottom: 0;
-            background: 
+            background:
               linear-gradient(45deg, rgba(3, 79, 175, 0.1), rgba(87, 215, 226, 0.1)),
               url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23034FAF' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
             animation: backgroundShift 30s linear infinite;
@@ -312,6 +353,25 @@ const SignUp = () => {
           .signup-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 15px rgba(3, 79, 175, 0.2);
+          }
+
+          .signup-btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+          }
+
+          .error-message {
+            color: #ff6b6b;
+            background-color: rgba(255, 107, 107, 0.1);
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 15px;
+            width: 100%;
+            text-align: center;
+            font-size: 0.9rem;
           }
 
           .login-section {

@@ -1,16 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
-import styled from 'styled-components';
 import Sidebar from './Sidebar';
 import backIcon from '../assets/back.png';
 import dateIcon from '../assets/date.png';
 import timeIcon from '../assets/time.png';
 import speaker from '../assets/speaker.png';
-
-const ScrollableContent = styled.div`
-  height: 100%;
-  position: relative;
-  overflow: hidden;
-`;
 
 const Conversation = () => {
   const [autoScroll, setAutoScroll] = useState(false);
@@ -79,15 +72,15 @@ const Conversation = () => {
   };
 
   return (
-    <div style={{ 
-      display: 'flex', 
-      height: '100vh', // Changed from minHeight to fixed height
+    <div style={{
+      display: 'flex',
+      height: '100vh',
       fontFamily: 'Montserrat, sans-serif',
       position: 'relative',
-      overflow: 'hidden' // Ensures no scrolling on the main container
+      overflow: 'hidden'
     }}>
       {/* Background Pattern */}
-      <div style={{
+      <div className="background-pattern" style={{
         position: 'absolute',
         top: 0,
         left: 0,
@@ -100,50 +93,94 @@ const Conversation = () => {
         animation: 'backgroundShift 30s linear infinite',
         zIndex: 0,
       }} />
-      
+
       {/* Gradient Overlay */}
-      <div style={{
+      <div className="gradient-overlay" style={{
         position: 'absolute',
         top: 0,
         left: 0,
         right: 0,
         bottom: 0,
-        background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(3, 79, 175, 0.2) 100%)',
+        background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(3, 79, 175, 0.25) 100%)',
         zIndex: 1,
+      }} />
+
+      {/* Decorative Elements */}
+      <div className="decorative-circle circle-1" style={{
+        position: 'absolute',
+        width: '400px',
+        height: '400px',
+        borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(3, 79, 175, 0.25) 0%, rgba(87, 215, 226, 0.12) 70%)',
+        top: '-150px',
+        right: '5%',
+        animation: 'float 15s ease-in-out infinite, shimmer 8s infinite',
+        zIndex: 1,
+        opacity: 0.7,
+        filter: 'blur(80px)',
+      }} />
+
+      <div className="decorative-circle circle-2" style={{
+        position: 'absolute',
+        width: '300px',
+        height: '300px',
+        borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(87, 215, 226, 0.25) 0%, rgba(3, 79, 175, 0.12) 70%)',
+        bottom: '5%',
+        left: '25%',
+        animation: 'float 12s ease-in-out infinite reverse, shimmer 10s infinite 2s',
+        zIndex: 1,
+        opacity: 0.7,
+        filter: 'blur(80px)',
       }} />
 
       <Sidebar style={{ position: 'relative', zIndex: 2 }} />
 
-      <div style={{ 
-        marginLeft: '350px',
-        flex: 1, 
-        padding: '30px 40px',
+      <div style={{
+        flex: 1,
+        padding: '30px',
         height: '100vh',
-        overflow: 'hidden', // Changed from overflowY: 'auto' to prevent scrolling
-        maxWidth: 'calc(100% - 300px)',
+        overflow: 'hidden',
         position: 'relative',
         zIndex: 2,
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        msOverflowStyle: 'none',
+        scrollbarWidth: 'none',
       }}>
         {/* Header */}
-        <div style={{ 
-          display: 'flex', 
-          alignItems: 'center', 
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
           marginBottom: '25px',
-          flexShrink: 0 // Prevents header from shrinking
+          flexShrink: 0,
+          background: 'rgba(255, 255, 255, 0.15)',
+          padding: '15px 25px',
+          borderRadius: '15px',
+          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
+          border: '1px solid rgba(255, 255, 255, 0.25)',
+          transition: 'all 0.3s ease',
+          animation: 'fadeIn 0.8s ease-out',
         }}>
           <div style={{
             display: 'flex',
             alignItems: 'center',
-            padding: '8px',
+            padding: '12px',
             borderRadius: '50%',
             cursor: 'pointer',
             transition: 'all 0.3s ease',
-            ':hover': {
-              background: 'rgba(3, 79, 175, 0.1)'
-            }
-          }}>
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'scale(1.05)';
+            e.currentTarget.style.background = 'rgba(3, 79, 175, 0.1)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'scale(1)';
+            e.currentTarget.style.background = 'transparent';
+          }}
+          >
             <img
               src={backIcon}
               alt="back"
@@ -154,74 +191,98 @@ const Conversation = () => {
                 cursor: 'pointer',
                 transition: 'transform 0.3s ease'
               }}
-              onMouseOver={(e) => e.target.style.transform = 'scale(1.1)'}
-              onMouseOut={(e) => e.target.style.transform = 'scale(1)'}
               onClick={() => window.history.back()}
             />
           </div>
-          <h1 style={{ 
-            margin: 0, 
-            fontSize: "28px", 
-            fontWeight: "900", 
+          <h1 style={{
+            margin: 0,
+            fontSize: "24px",
+            fontWeight: "900",
             color: '#034FAF',
-            letterSpacing: '0.5px'
+            letterSpacing: '0.5px',
+            cursor: 'default',
+            textShadow: '0 1px 3px rgba(255, 255, 255, 0.7)',
           }}>CONVERSATION</h1>
         </div>
 
         {/* Title Header */}
         <div style={{
-          background: 'white',
+          background: 'rgba(255, 255, 255, 0.15)',
           padding: '25px',
           borderRadius: '15px',
           boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
           marginBottom: '25px',
-          border: '1px solid rgba(3, 79, 175, 0.1)',
-          flexShrink: 0 // Prevents title section from shrinking
+          border: '1px solid rgba(255, 255, 255, 0.25)',
+          flexShrink: 0,
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
+          animation: 'fadeIn 0.8s ease-out',
         }}>
-          <h2 style={{ 
-            margin: 0, 
-            fontSize: '24px', 
+          <h2 style={{
+            margin: 0,
+            fontSize: '24px',
             fontWeight: '800',
-            color: '#2c3e50',
-            marginBottom: '12px'
+            color: '#034FAF',
+            marginBottom: '12px',
+            cursor: 'default',
+            textShadow: '0 1px 3px rgba(255, 255, 255, 0.7)',
           }}>Online Kamustahan</h2>
-          
-          <div style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
+
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
             justifyContent: 'space-between'
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <img src={dateIcon} alt="Date" style={{ width: '20px', height: '20px', marginRight: '8px' }} />
-                <span style={{ 
-                  fontSize: '15px', 
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                background: 'rgba(255, 255, 255, 0.3)',
+                padding: '8px 12px',
+                borderRadius: '8px',
+                border: '1px solid rgba(255, 255, 255, 0.3)',
+              }}>
+                <img src={dateIcon} alt="Date" style={{ width: '20px', height: '20px', marginRight: '8px', cursor: 'default' }} />
+                <span style={{
+                  fontSize: '15px',
                   fontWeight: '600',
-                  color: '#566573'
+                  color: '#333',
+                  cursor: 'default',
                 }}>07/26/2024</span>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <img src={timeIcon} alt="Time" style={{ width: '20px', height: '20px', marginRight: '8px' }} />
-                <span style={{ 
-                  fontSize: '15px', 
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                background: 'rgba(255, 255, 255, 0.3)',
+                padding: '8px 12px',
+                borderRadius: '8px',
+                border: '1px solid rgba(255, 255, 255, 0.3)',
+              }}>
+                <img src={timeIcon} alt="Time" style={{ width: '20px', height: '20px', marginRight: '8px', cursor: 'default' }} />
+                <span style={{
+                  fontSize: '15px',
                   fontWeight: '600',
-                  color: '#566573'
+                  color: '#333',
+                  cursor: 'default',
                 }}>10:31PM</span>
               </div>
             </div>
 
-            <div style={{ 
-              display: 'flex', 
+            <div style={{
+              display: 'flex',
               alignItems: 'center',
-              background: 'rgba(3, 79, 175, 0.05)',
+              background: 'rgba(255, 255, 255, 0.3)',
               padding: '8px 15px',
-              borderRadius: '10px'
+              borderRadius: '10px',
+              border: '1px solid rgba(255, 255, 255, 0.3)',
+              boxShadow: '0 2px 10px rgba(0, 0, 0, 0.05)',
             }}>
-              <span style={{ 
-                fontSize: '14px', 
-                fontWeight: '600', 
+              <span style={{
+                fontSize: '14px',
+                fontWeight: '600',
                 marginRight: '12px',
-                color: '#034FAF'
+                color: '#034FAF',
+                cursor: 'default',
               }}>Auto-scroll</span>
               <div
                 onClick={toggleAutoScroll}
@@ -232,7 +293,8 @@ const Conversation = () => {
                   backgroundColor: autoScroll ? '#034FAF' : '#E0E0E0',
                   position: 'relative',
                   cursor: 'pointer',
-                  transition: 'background-color 0.3s ease'
+                  transition: 'background-color 0.3s ease',
+                  boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
                 }}
               >
                 <div
@@ -254,64 +316,89 @@ const Conversation = () => {
         </div>
 
         {/* Transcript Section */}
-        <div 
-          ref={transcriptRef}  // Add the ref here
+        <div
+          ref={transcriptRef}
           style={{
-            background: 'white',
+            background: 'rgba(255, 255, 255, 0.15)',
             padding: '30px',
             borderRadius: '15px',
             boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
             overflowY: 'auto',
             flex: 1,
-            border: '1px solid rgba(3, 79, 175, 0.1)',
+            border: '1px solid rgba(255, 255, 255, 0.25)',
             marginBottom: '0',
-            scrollBehavior: 'smooth'  // Add smooth scrolling
+            scrollBehavior: 'smooth',
+            backdropFilter: 'blur(10px)',
+            WebkitBackdropFilter: 'blur(10px)',
+            animation: 'fadeIn 0.8s ease-out',
+            msOverflowStyle: 'none',  /* IE and Edge */
+            scrollbarWidth: 'none',   /* Firefox */
           }}
-          className="transcript-section"  // Add class for styling
+          className="transcript-section"
         >
           {/* Map through transcript data */}
           {transcriptData.map((entry, index) => (
-            <div 
+            <div
               key={index}
-              style={{ 
+              style={{
                 marginBottom: '25px',
-                padding: '15px',
+                padding: '20px',
                 borderRadius: '12px',
-                background: index % 2 === 0 ? 'rgba(3, 79, 175, 0.03)' : 'white',
-                border: '1px solid rgba(3, 79, 175, 0.05)'
+                background: index % 2 === 0 ? 'rgba(255, 255, 255, 0.5)' : 'rgba(255, 255, 255, 0.3)',
+                border: '1px solid rgba(255, 255, 255, 0.3)',
+                backdropFilter: 'blur(5px)',
+                WebkitBackdropFilter: 'blur(5px)',
+                boxShadow: '0 2px 10px rgba(0, 0, 0, 0.03)',
+                animation: `fadeIn 0.5s ease-out ${index * 0.1}s both`,
+                transition: 'all 0.3s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.05)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.03)';
               }}
             >
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '15px' }}>
                 <div style={{
                   borderRadius: "50%",
-                  padding: "8px",
-                  background: 'rgba(3, 79, 175, 0.05)'
+                  padding: "10px",
+                  background: 'rgba(3, 79, 175, 0.1)',
+                  border: '1px solid rgba(3, 79, 175, 0.2)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                 }}>
                   <img
                     src={speaker}
                     alt="Speaker Icon"
-                    style={{ width: "24px", height: "24px" }}
+                    style={{ width: "24px", height: "24px", cursor: 'default' }}
                   />
                 </div>
                 <div style={{ flex: 1 }}>
-                  <div style={{ 
-                    display: 'flex', 
-                    alignItems: 'center', 
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
                     marginBottom: '8px',
                   }}>
-                    <span style={{ 
-                      fontSize: "15px", 
-                      fontWeight: "700", 
-                      color: "#034FAF"
+                    <span style={{
+                      fontSize: "16px",
+                      fontWeight: "700",
+                      color: "#034FAF",
+                      cursor: 'default',
+                      textShadow: '0 1px 2px rgba(255, 255, 255, 0.7)',
                     }}>
                       {entry.speaker}
                     </span>
                   </div>
-                  <p style={{ 
-                    fontSize: "15px", 
+                  <p style={{
+                    fontSize: "15px",
                     lineHeight: '1.6',
-                    color: "#37474F",
-                    margin: 0
+                    color: "#333",
+                    margin: 0,
+                    cursor: 'default',
                   }}>
                     {entry.text}
                   </p>
@@ -329,21 +416,36 @@ const Conversation = () => {
             100% { background-position: 100% 100%; }
           }
 
+          @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+            100% { transform: translateY(0) rotate(0deg); }
+          }
+
+          @keyframes shimmer {
+            0% { opacity: 0.7; }
+            50% { opacity: 0.9; }
+            100% { opacity: 0.7; }
+          }
+
+          @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+
+          /* Hide scrollbar for Chrome, Safari and Opera */
           .transcript-section::-webkit-scrollbar {
-            width: 6px;
+            display: none;
           }
 
-          .transcript-section::-webkit-scrollbar-track {
-            background: #f1f1f1;
+          /* Default cursor for text elements */
+          h1, h2, h3, h4, h5, h6, p, span, div, section, label {
+            cursor: default !important;
           }
 
-          .transcript-section::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 3px;
-          }
-
-          .transcript-section::-webkit-scrollbar-thumb:hover {
-            background: #555;
+          /* Ensure buttons and interactive elements have pointer cursor */
+          button, a, .clickable, [role="button"], input[type="file"], input[type="submit"] {
+            cursor: pointer !important;
           }
         `}
       </style>

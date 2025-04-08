@@ -123,7 +123,6 @@ const FacultyAttendance = () => {
       <Sidebar style={{ position: 'relative', zIndex: 2 }} />
       
       <div style={{ 
-        marginLeft: '320px',
         flex: 1, 
         padding: '30px',
         position: 'relative',

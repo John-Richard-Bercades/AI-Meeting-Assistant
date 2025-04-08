@@ -43,6 +43,7 @@ const Login = () => {
         localStorage.setItem('isAuthenticated', 'true');
         localStorage.setItem('userId', data.user.id);
         localStorage.setItem('username', data.user.username);
+        localStorage.setItem('email', data.user.email);
 
         // Navigate to home
         navigate('/home', { replace: true });
@@ -72,7 +73,7 @@ const Login = () => {
           <div className="login-form">
             <img src={LOGO} alt="App Logo" className="app-logo" />
             <h2 className="form-title">Login</h2>
-            <form onSubmit={handleLogin}>
+            <form onSubmit={handleLogin} style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <div className="input-group">
                 <label htmlFor="username">Username</label>
                 <input
@@ -108,94 +109,14 @@ const Login = () => {
         </main>
 
         <div className="action-buttons">
-          <button className="back-button" onClick={handleBack}>
+          <button className="luxury-btn" onClick={handleBack}>
             <img src={backIcon} alt="Back" className="back-icon" />
             <span>Back to Home</span>
           </button>
           <p className="footer-text">AI-Powered Meeting Assistant</p>
         </div>
 
-        <style>
-        {`
-          .action-buttons {
-            padding: 12px 30px;
-            background: linear-gradient(45deg, #034FAF, #57D7E2);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 10px 20px;
-            border-radius: 15px;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-          }
 
-          .back-button {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(255, 255, 255, 0.9);
-            border: none;
-            border-radius: 20px;
-            padding: 8px 16px;
-            color: #034FAF;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 500;
-          }
-
-          .back-button:hover {
-            background: white;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-          }
-
-          .back-icon {
-            width: 20px;
-            height: 20px;
-            object-fit: contain;
-          }
-
-          .back-button span {
-            font-size: 0.9rem;
-            font-weight: 500;
-          }
-
-          .footer-text {
-            color: white;
-            margin: 0;
-            font-size: 0.9rem;
-            text-align: center;
-            flex: 1;
-          }
-
-          @media (max-width: 768px) {
-            .action-buttons {
-              padding: 10px 20px;
-              margin: 5px 10px;
-            }
-
-            .back-button {
-              padding: 6px 12px;
-            }
-
-            .back-icon {
-              width: 16px;
-              height: 16px;
-            }
-
-            .footer-text {
-              font-size: 0.8rem;
-            }
-
-            .back-button span {
-              font-size: 0.8rem;
-            }
-          }
-        `}
-        </style>
       </div>
 
       <style>
@@ -213,6 +134,7 @@ const Login = () => {
             right: 0;
             bottom: 0;
             background-color: #000;
+            padding-bottom: 60px; /* Add padding to account for footer height */
           }
 
           html, body, #root {
@@ -252,12 +174,17 @@ const Login = () => {
             display: flex;
             flex-direction: column;
             flex: 1;
-
+            padding-bottom: 60px; /* Add padding to account for footer height */
           }
 
           @keyframes backgroundShift {
             0% { background-position: 0 0; }
             100% { background-position: 100% 100%; }
+          }
+
+          @keyframes shine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
           }
 
           .logo {
@@ -278,8 +205,9 @@ const Login = () => {
             flex: 1;
             display: flex;
             justify-content: center;
-            align-items: flex-start;
-            padding-top: 10px;
+            align-items: center;
+            padding: 0 0 80px 0; /* Add bottom padding to account for fixed action buttons */
+            min-height: calc(100vh - 60px); /* Subtract footer height */
           }
 
           .login-form {
@@ -294,7 +222,9 @@ const Login = () => {
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-top: 0px;
+            margin: 0 0 60px 0; /* Add bottom margin to prevent overlap with footer */
+            position: relative;
+            z-index: 10;
           }
 
           .app-logo {
@@ -320,9 +250,8 @@ const Login = () => {
           }
 
           .input-group {
-            width: 90%;
+            width: 100%;
             margin-bottom: 20px;
-            margin-right: 35px;
           }
 
           .input-group label {
@@ -474,29 +403,64 @@ const Login = () => {
           }
 
           .action-buttons {
-            padding: 20px;
+            padding: 20px 30px;
             background: linear-gradient(45deg, #034FAF, #57D7E2);
             display: flex;
             align-items: center;
+            justify-content: space-between;
             box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.1);
-            border-radius: 30px 30px 0 0;
-            margin: 0 20px;
+            border-radius: 30px 30px 0 0; /* Curved top corners */
+            margin: 0 20px; /* Added margin to show the curved corners */
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 5; /* Lower z-index so login form can be above */
+            overflow: hidden; /* For the shimmer effect */
+            height: auto; /* Auto height based on content */
           }
 
-          .footer-left {
-            flex: 1;
+          .action-buttons::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: shine 3s infinite;
           }
 
-          .back-button {
-            background: rgba(255, 255, 255, 0.9);
+          .luxury-btn {
+            font-family: 'Montserrat', sans-serif;
+            padding: 12px 24px;
+            border-radius: 30px;
             border: none;
-            border-radius: 20px;
-            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #034FAF;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(5px);
+            position: relative;
+            overflow: hidden;
             display: flex;
             align-items: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            gap: 6px;
+            gap: 8px;
+          }
+
+          .luxury-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            background: #034FAF;
+            color: white;
+            box-shadow: 0 8px 25px rgba(3, 79, 175, 0.3);
+          }
+
+          .luxury-btn:active {
+            transform: translateY(-1px);
           }
 
           .back-icon {
@@ -506,11 +470,13 @@ const Login = () => {
           }
 
           .footer-text {
-            flex: 2;
             color: white;
-            font-size: 1rem;
+            font-size: 1.2rem;
             margin: 0;
             text-align: center;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
           }
 
           @media (max-width: 768px) {

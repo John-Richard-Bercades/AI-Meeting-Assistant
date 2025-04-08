@@ -232,10 +232,10 @@ const UploadRecorded = () => {
       height: '100vh',
       fontFamily: "'Montserrat', sans-serif",
       overflow: 'hidden',
-      position: 'relative', // Added for absolute positioning of background elements
+      position: 'relative',
     }}>
       {/* Background Elements */}
-      <div style={{
+      <div className="background-pattern" style={{
         position: 'absolute',
         top: 0,
         left: 0,
@@ -249,21 +249,50 @@ const UploadRecorded = () => {
         zIndex: 0,
       }} />
 
-      <div style={{
+      {/* Gradient Overlay */}
+      <div className="gradient-overlay" style={{
         position: 'absolute',
         top: 0,
         left: 0,
         right: 0,
         bottom: 0,
-        background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(3, 79, 175, 0.2) 100%)',
+        background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(3, 79, 175, 0.25) 100%)',
         zIndex: 1,
+      }} />
+
+      {/* Decorative Elements */}
+      <div className="decorative-circle circle-1" style={{
+        position: 'absolute',
+        width: '400px',
+        height: '400px',
+        borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(3, 79, 175, 0.25) 0%, rgba(87, 215, 226, 0.12) 70%)',
+        top: '-150px',
+        right: '5%',
+        animation: 'float 15s ease-in-out infinite, shimmer 8s infinite',
+        zIndex: 1,
+        opacity: 0.7,
+        filter: 'blur(80px)',
+      }} />
+
+      <div className="decorative-circle circle-2" style={{
+        position: 'absolute',
+        width: '300px',
+        height: '300px',
+        borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(87, 215, 226, 0.25) 0%, rgba(3, 79, 175, 0.12) 70%)',
+        bottom: '5%',
+        left: '25%',
+        animation: 'float 12s ease-in-out infinite reverse, shimmer 10s infinite 2s',
+        zIndex: 1,
+        opacity: 0.7,
+        filter: 'blur(80px)',
       }} />
 
       {/* Main Content */}
       <Sidebar style={{ position: 'relative', zIndex: 2 }} />
 
       <div style={{
-        marginLeft: '320px',
         flex: 1,
         display: 'flex',
         flexDirection: 'column',
@@ -271,11 +300,13 @@ const UploadRecorded = () => {
         position: 'relative',
         zIndex: 2,
         height: '100vh',
-        overflowY: 'auto'
+        overflow: 'hidden',
+        msOverflowStyle: 'none',
+        scrollbarWidth: 'none',
       }}>
         {/* Header Section */}
         <div style={{
-          background: 'rgba(255, 255, 255, 0.95)',
+          background: 'rgba(255, 255, 255, 0.15)',
           padding: '20px 30px',
           borderRadius: '15px',
           boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
@@ -283,6 +314,9 @@ const UploadRecorded = () => {
           display: 'flex',
           alignItems: 'center',
           backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
+          border: '1px solid rgba(255, 255, 255, 0.25)',
+          transition: 'all 0.3s ease',
         }}>
           <div style={{
             display: 'flex',
@@ -304,7 +338,7 @@ const UploadRecorded = () => {
                 marginRight: '10px',
               }}
             />
-            <span style={{ color: '#034FAF', fontWeight: '600' }}>Back</span>
+            <span style={{ color: '#034FAF', fontWeight: '600', cursor: 'pointer' }}>Back</span>
           </div>
           <h1 style={{
             margin: '0 auto',
@@ -312,6 +346,8 @@ const UploadRecorded = () => {
             fontWeight: "900",
             color: '#034FAF',
             letterSpacing: '1px',
+            cursor: 'default',
+            textShadow: '0 1px 3px rgba(255, 255, 255, 0.7)',
           }}>
             UPLOAD RECORDED MEETING FILES
           </h1>
@@ -324,7 +360,9 @@ const UploadRecorded = () => {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          padding: '20px',
+          padding: '10px',
+          maxHeight: 'calc(100vh - 150px)',
+          overflow: 'hidden',
         }}>
           <div
             onClick={openFileDialog}
@@ -337,18 +375,21 @@ const UploadRecorded = () => {
               flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
-              background: 'rgba(255, 255, 255, 0.95)',
-              padding: '50px',
+              background: 'rgba(255, 255, 255, 0.15)',
+              padding: '40px',
               borderRadius: '20px',
               boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
               border: `2px dashed ${isDragging ? '#034FAF' : 'rgba(3, 79, 175, 0.2)'}`,
               backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
               maxWidth: '800px',
               width: '100%',
+              maxHeight: 'calc(100vh - 250px)',
               transition: 'all 0.3s ease',
               cursor: 'pointer',
               transform: isDragging ? 'scale(1.02)' : 'scale(1)',
               position: 'relative',
+              animation: 'fadeIn 0.8s ease-out',
             }}
           >
             <input
@@ -363,8 +404,8 @@ const UploadRecorded = () => {
               src={uploadIcon}
               alt="Upload Icon"
               style={{
-                height: '120px',
-                marginBottom: '30px',
+                height: '100px',
+                marginBottom: '20px',
                 transition: 'transform 0.3s ease',
                 filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1))',
               }}
@@ -486,20 +527,28 @@ const UploadRecorded = () => {
           {/* Metadata Form */}
           {file && !isProcessing && !uploadResponse && (
             <div style={{
-              marginTop: '30px',
+              marginTop: '20px',
               width: '100%',
               maxWidth: '800px',
-              padding: '20px',
-              backgroundColor: 'white',
-              borderRadius: '12px',
+              padding: '25px',
+              background: 'rgba(255, 255, 255, 0.15)',
+              borderRadius: '15px',
               boxShadow: '0 4px 15px rgba(0, 0, 0, 0.05)',
+              maxHeight: 'calc(100vh - 450px)',
+              overflow: 'hidden',
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
+              border: '1px solid rgba(255, 255, 255, 0.25)',
+              animation: 'fadeIn 0.6s ease-out',
             }}>
               <h3 style={{
                 color: '#034FAF',
                 marginTop: 0,
                 marginBottom: '20px',
-                fontSize: '18px',
+                fontSize: '20px',
                 fontWeight: '700',
+                cursor: 'default',
+                textShadow: '0 1px 3px rgba(255, 255, 255, 0.7)',
               }}>Meeting Information</h3>
 
               <div style={{ marginBottom: '20px' }}>
@@ -509,7 +558,8 @@ const UploadRecorded = () => {
                     display: 'block',
                     marginBottom: '8px',
                     fontWeight: '600',
-                    color: '#034FAF'
+                    color: '#034FAF',
+                    cursor: 'default',
                   }}
                 >
                   Title *
@@ -524,9 +574,19 @@ const UploadRecorded = () => {
                     width: '100%',
                     padding: '12px',
                     borderRadius: '8px',
-                    border: '1px solid #ddd',
+                    border: '1px solid rgba(3, 79, 175, 0.2)',
                     fontSize: '16px',
-                    boxSizing: 'border-box'
+                    boxSizing: 'border-box',
+                    background: 'rgba(255, 255, 255, 0.8)',
+                    transition: 'all 0.3s ease',
+                  }}
+                  onFocus={(e) => {
+                    e.target.style.background = 'white';
+                    e.target.style.boxShadow = '0 0 0 2px rgba(3, 79, 175, 0.1)';
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.background = 'rgba(255, 255, 255, 0.8)';
+                    e.target.style.boxShadow = 'none';
                   }}
                   required
                 />
@@ -539,7 +599,8 @@ const UploadRecorded = () => {
                     display: 'block',
                     marginBottom: '8px',
                     fontWeight: '600',
-                    color: '#034FAF'
+                    color: '#034FAF',
+                    cursor: 'default',
                   }}
                 >
                   Description
@@ -553,11 +614,22 @@ const UploadRecorded = () => {
                     width: '100%',
                     padding: '12px',
                     borderRadius: '8px',
-                    border: '1px solid #ddd',
+                    border: '1px solid rgba(3, 79, 175, 0.2)',
                     fontSize: '16px',
                     minHeight: '100px',
-                    resize: 'vertical',
-                    boxSizing: 'border-box'
+                    maxHeight: '150px',
+                    resize: 'none',
+                    boxSizing: 'border-box',
+                    background: 'rgba(255, 255, 255, 0.8)',
+                    transition: 'all 0.3s ease',
+                  }}
+                  onFocus={(e) => {
+                    e.target.style.background = 'white';
+                    e.target.style.boxShadow = '0 0 0 2px rgba(3, 79, 175, 0.1)';
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.background = 'rgba(255, 255, 255, 0.8)';
+                    e.target.style.boxShadow = 'none';
                   }}
                 />
               </div>
@@ -569,7 +641,7 @@ const UploadRecorded = () => {
             display: 'flex',
             justifyContent: 'center',
             gap: '20px',
-            marginTop: '40px',
+            marginTop: '30px',
             width: '100%',
             maxWidth: '800px',
           }}>
@@ -577,24 +649,28 @@ const UploadRecorded = () => {
               onClick={() => navigate('/home')}
               style={{
                 padding: '15px 40px',
-                backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                background: 'rgba(255, 255, 255, 0.15)',
                 color: '#034FAF',
-                border: 'none',
-                borderRadius: '12px',
+                border: '2px solid #034FAF',
+                borderRadius: '8px',
                 fontWeight: '600',
                 cursor: 'pointer',
                 width: '200px',
                 transition: 'all 0.3s ease',
                 fontSize: '16px',
                 boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
+                backdropFilter: 'blur(5px)',
+                WebkitBackdropFilter: 'blur(5px)',
               }}
               onMouseOver={(e) => {
                 e.target.style.transform = 'translateY(-2px)';
                 e.target.style.boxShadow = '0 6px 20px rgba(0, 0, 0, 0.15)';
+                e.target.style.background = 'rgba(3, 79, 175, 0.1)';
               }}
               onMouseOut={(e) => {
                 e.target.style.transform = 'translateY(0)';
                 e.target.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.1)';
+                e.target.style.background = 'rgba(255, 255, 255, 0.15)';
               }}
             >
               Cancel
@@ -606,10 +682,10 @@ const UploadRecorded = () => {
                 padding: '15px 40px',
                 background: file && !error && !isProcessing && title.trim()
                   ? 'linear-gradient(45deg, #034FAF, #0367d4)'
-                  : '#ccc',
+                  : 'rgba(204, 204, 204, 0.7)',
                 color: 'white',
                 border: 'none',
-                borderRadius: '12px',
+                borderRadius: '8px',
                 fontWeight: '600',
                 cursor: file && !error && !isProcessing && title.trim() ? 'pointer' : 'not-allowed',
                 width: '200px',
@@ -636,12 +712,50 @@ const UploadRecorded = () => {
         </div>
       </div>
 
-      {/* Add animation keyframes */}
+      {/* Add animation keyframes and hide scrollbars */}
       <style>
         {`
           @keyframes backgroundShift {
             0% { background-position: 0 0; }
             100% { background-position: 100% 100%; }
+          }
+
+          @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+            100% { transform: translateY(0) rotate(0deg); }
+          }
+
+          @keyframes shimmer {
+            0% { opacity: 0.7; }
+            50% { opacity: 0.9; }
+            100% { opacity: 0.7; }
+          }
+
+          @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+
+          /* Hide scrollbar for Chrome, Safari and Opera */
+          *::-webkit-scrollbar {
+            display: none;
+          }
+
+          /* Hide scrollbar for IE, Edge and Firefox */
+          * {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+          }
+
+          /* Default cursor for text elements */
+          h1, h2, h3, h4, h5, h6, p, span, div, section, label {
+            cursor: default !important;
+          }
+
+          /* Ensure buttons and interactive elements have pointer cursor */
+          button, a, .clickable, [role="button"], input[type="file"], input[type="submit"] {
+            cursor: pointer !important;
           }
         `}
       </style>

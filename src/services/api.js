@@ -170,4 +170,55 @@ ApiClient.prototype.createMinute = createMinute;
 ApiClient.prototype.getMinutes = getMinutes;
 ApiClient.prototype.getMinuteDetails = getMinuteDetails;
 
+// Get user profile
+async function getUserProfile(userId) {
+  try {
+    const response = await fetch(`${this.baseURL}/user/${userId}`, {
+      credentials: 'include',
+      headers: {
+        'Accept': 'application/json',
+      }
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || `Failed to get user profile: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Get user profile error:', error);
+    throw error;
+  }
+}
+
+// Update user profile
+async function updateUserProfile(userId, userData) {
+  try {
+    const response = await fetch(`${this.baseURL}/user/${userId}`, {
+      method: 'PUT',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify(userData)
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || `Failed to update user profile: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Update user profile error:', error);
+    throw error;
+  }
+}
+
+// Add the methods to the ApiClient prototype
+ApiClient.prototype.getUserProfile = getUserProfile;
+ApiClient.prototype.updateUserProfile = updateUserProfile;
+
 export const apiClient = new ApiClient();

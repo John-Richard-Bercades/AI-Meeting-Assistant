@@ -21,6 +21,9 @@ import Conversation from "./components/Conversation";
 import MinutesList from "./components/MinutesList";
 import Minutes from "./components/Minutes";
 
+// User Settings Component
+import Settings from "./components/Settings";
+
 // Add Platform Context
 const PlatformContext = React.createContext();
 
@@ -32,6 +35,8 @@ const styles = {
     padding: 0,
     overflow: 'hidden',
     background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)',
+    display: 'flex',
+    position: 'relative'
   }
 };
 
@@ -42,7 +47,10 @@ const ProtectedRoute = ({ children }) => {
 
 const PageLayout = ({ children }) => (
   <div style={styles.pageContainer}>
-    {children}
+    <Sidebar />
+    <div style={{ marginLeft: '320px', flex: 1, height: '100%', overflow: 'auto' }}>
+      {children}
+    </div>
   </div>
 );
 
@@ -128,6 +136,15 @@ const App = () => {
             <ProtectedRoute>
               <PageLayout>
                 <Minutes />
+              </PageLayout>
+            </ProtectedRoute>
+          } />
+
+          {/* Settings Route */}
+          <Route path="/settings" element={
+            <ProtectedRoute>
+              <PageLayout>
+                <Settings />
               </PageLayout>
             </ProtectedRoute>
           } />

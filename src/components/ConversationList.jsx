@@ -24,11 +24,6 @@ const ConversationList = () => {
         navigate(`/transcription/${id}`);
     };
 
-    const handleDownload = (e, title) => {
-        e.stopPropagation();
-        console.log(`Downloading transcript for ${title}`);
-    };
-
     const handleDelete = (e, title) => {
         e.stopPropagation();
         // Add confirmation before deletion
@@ -38,7 +33,7 @@ const ConversationList = () => {
         }
     };
 
-    const ActionButton = ({ onClick, color = '#034FAF', children }) => (
+    const ActionButton = ({ onClick, color = 'linear-gradient(45deg, #034FAF, #0367d4)', children }) => (
         <button
             onClick={onClick}
             style={{
@@ -52,17 +47,19 @@ const ConversationList = () => {
                 cursor: 'pointer',
                 marginLeft: '10px',
                 transition: 'all 0.3s ease',
-                boxShadow: '0 2px 4px rgba(3, 79, 175, 0.1)'
+                boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '5px',
             }}
             onMouseEnter={(e) => {
-                e.target.style.transform = 'translateY(-2px)';
-                e.target.style.boxShadow = '0 4px 12px rgba(3, 79, 175, 0.1)';
-                e.target.style.background = color === '#034FAF' ? '#0241a8' : '#2c5282';
+                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.15)';
             }}
             onMouseLeave={(e) => {
-                e.target.style.transform = 'translateY(0)';
-                e.target.style.boxShadow = '0 2px 4px rgba(3, 79, 175, 0.1)';
-                e.target.style.background = color;
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 2px 5px rgba(0, 0, 0, 0.1)';
             }}
         >
             {children}
@@ -70,15 +67,15 @@ const ConversationList = () => {
     );
 
     return (
-        <div style={{ 
-            display: 'flex', 
-            minHeight: '100vh', 
+        <div style={{
+            display: 'flex',
+            minHeight: '100vh',
             fontFamily: 'Montserrat, sans-serif',
             position: 'relative',
             overflow: 'hidden'
         }}>
             {/* Background Pattern */}
-            <div style={{
+            <div className="background-pattern" style={{
                 position: 'absolute',
                 top: 0,
                 left: 0,
@@ -91,29 +88,58 @@ const ConversationList = () => {
                 animation: 'backgroundShift 30s linear infinite',
                 zIndex: 0,
             }} />
-            
+
             {/* Gradient Overlay */}
-            <div style={{
+            <div className="gradient-overlay" style={{
                 position: 'absolute',
                 top: 0,
                 left: 0,
                 right: 0,
                 bottom: 0,
-                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(3, 79, 175, 0.2) 100%)',
+                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(3, 79, 175, 0.25) 100%)',
                 zIndex: 1,
+            }} />
+
+            {/* Decorative Elements */}
+            <div className="decorative-circle circle-1" style={{
+                position: 'absolute',
+                width: '400px',
+                height: '400px',
+                borderRadius: '50%',
+                background: 'radial-gradient(circle, rgba(3, 79, 175, 0.25) 0%, rgba(87, 215, 226, 0.12) 70%)',
+                top: '-150px',
+                right: '5%',
+                animation: 'float 15s ease-in-out infinite, shimmer 8s infinite',
+                zIndex: 1,
+                opacity: 0.7,
+                filter: 'blur(80px)',
+            }} />
+
+            <div className="decorative-circle circle-2" style={{
+                position: 'absolute',
+                width: '300px',
+                height: '300px',
+                borderRadius: '50%',
+                background: 'radial-gradient(circle, rgba(87, 215, 226, 0.25) 0%, rgba(3, 79, 175, 0.12) 70%)',
+                bottom: '5%',
+                left: '25%',
+                animation: 'float 12s ease-in-out infinite reverse, shimmer 10s infinite 2s',
+                zIndex: 1,
+                opacity: 0.7,
+                filter: 'blur(80px)',
             }} />
 
             <Sidebar style={{ position: 'relative', zIndex: 2 }} />
 
-            <div style={{ 
-                marginLeft: '320px',
-                flex: 1, 
-                padding: '30px 40px',
+            <div style={{
+                flex: 1,
+                padding: '30px',
                 height: '100vh',
-                overflow: 'hidden',
-                maxWidth: 'calc(100% - 300px)',
+                overflow: 'auto',
                 position: 'relative',
                 zIndex: 2,
+                msOverflowStyle: 'none',
+                scrollbarWidth: 'none',
             }}>
                 <div className="content-card">
                     {/* Header */}
@@ -121,24 +147,33 @@ const ConversationList = () => {
                         display: 'flex',
                         alignItems: 'center',
                         marginBottom: '30px',
-                        gap: '20px'
+                        gap: '20px',
+                        background: 'rgba(255, 255, 255, 0.15)',
+                        padding: '15px 25px',
+                        borderRadius: '15px',
+                        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
+                        backdropFilter: 'blur(10px)',
+                        WebkitBackdropFilter: 'blur(10px)',
+                        border: '1px solid rgba(255, 255, 255, 0.25)',
+                        transition: 'all 0.3s ease',
+                        animation: 'fadeIn 0.8s ease-out',
                     }}>
                         <div style={{
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            padding: '15px',
+                            padding: '12px',
                             borderRadius: '50%',
                             cursor: 'pointer',
                             transition: 'all 0.3s ease',
-                            width: '50px',
-                            height: '50px',
                         }}
                         onMouseEnter={(e) => {
                             e.currentTarget.style.transform = 'scale(1.05)';
+                            e.currentTarget.style.background = 'rgba(3, 79, 175, 0.1)';
                         }}
                         onMouseLeave={(e) => {
                             e.currentTarget.style.transform = 'scale(1)';
+                            e.currentTarget.style.background = 'transparent';
                         }}
                         onClick={() => window.history.back()}
                         >
@@ -146,80 +181,91 @@ const ConversationList = () => {
                                 src={backIcon}
                                 alt="back"
                                 style={{
-                                    width: '32px',
-                                    height: '32px',
-                                    transition: 'transform 0.3s ease'
+                                    width: '28px',
+                                    height: '28px',
+                                    transition: 'transform 0.3s ease',
+                                    cursor: 'pointer',
                                 }}
                             />
                         </div>
-                        <h1 style={{ 
-                            margin: 0, 
-                            fontSize: "28px", 
-                            fontWeight: "900", 
+                        <h1 style={{
+                            margin: 0,
+                            fontSize: "24px",
+                            fontWeight: "900",
                             color: '#034FAF',
-                            letterSpacing: '0.5px'
+                            letterSpacing: '0.5px',
+                            cursor: 'default',
+                            textShadow: '0 1px 3px rgba(255, 255, 255, 0.7)',
                         }}>TRANSCRIPTIONS</h1>
                     </div>
 
                     {/* Table Container */}
                     <div style={{
-                        background: 'white',
+                        background: 'rgba(255, 255, 255, 0.15)',
                         borderRadius: '15px',
                         padding: '30px',
-                        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)'
+                        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
+                        backdropFilter: 'blur(10px)',
+                        WebkitBackdropFilter: 'blur(10px)',
+                        border: '1px solid rgba(255, 255, 255, 0.25)',
+                        animation: 'fadeIn 0.8s ease-out',
                     }}>
-                        <table style={{ 
-                            width: '100%', 
+                        <table style={{
+                            width: '100%',
                             borderCollapse: 'separate',
                             borderSpacing: '0 12px'
                         }}>
                             <thead>
                                 <tr>
-                                    <th style={{...tableHeaderStyle, width: '30%'}}>TITLE</th>
-                                    <th style={{...tableHeaderStyle, width: '25%'}}>CREATED AT</th>
-                                    <th style={{...tableHeaderStyle, width: '25%'}}>UPDATED AT</th>
-                                    <th style={{...tableHeaderStyle, width: '10%', textAlign: 'center'}}>EDIT</th>
-                                    <th style={{...tableHeaderStyle, width: '10%', textAlign: 'center'}}>DELETE</th>
+                                    <th style={{...tableHeaderStyle, width: '30%', cursor: 'default'}}>TITLE</th>
+                                    <th style={{...tableHeaderStyle, width: '25%', cursor: 'default'}}>CREATED AT</th>
+                                    <th style={{...tableHeaderStyle, width: '25%', cursor: 'default'}}>UPDATED AT</th>
+                                    <th style={{...tableHeaderStyle, width: '10%', textAlign: 'center', cursor: 'default'}}>EDIT</th>
+                                    <th style={{...tableHeaderStyle, width: '10%', textAlign: 'center', cursor: 'default'}}>DELETE</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {meetingMinutes.map((meeting) => (
-                                    <tr 
-                                        key={meeting.id} 
+                                {meetingMinutes.map((meeting, index) => (
+                                    <tr
+                                        key={meeting.id}
                                         onClick={() => handleRowClick(meeting.id)}
                                         style={{
                                             cursor: 'pointer',
                                             transition: 'all 0.3s ease',
-                                            background: 'white',
+                                            background: 'rgba(255, 255, 255, 0.5)',
                                             boxShadow: '0 2px 4px rgba(0, 0, 0, 0.02)',
                                             borderRadius: '8px',
+                                            backdropFilter: 'blur(5px)',
+                                            WebkitBackdropFilter: 'blur(5px)',
+                                            border: '1px solid rgba(255, 255, 255, 0.3)',
+                                            animation: `fadeIn 0.5s ease-out ${index * 0.1}s both`,
                                         }}
                                         onMouseEnter={(e) => {
                                             e.currentTarget.style.transform = 'translateY(-2px)';
                                             e.currentTarget.style.boxShadow = '0 4px 12px rgba(3, 79, 175, 0.1)';
-                                            e.currentTarget.style.background = 'rgba(3, 79, 175, 0.02)';
+                                            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.7)';
                                         }}
                                         onMouseLeave={(e) => {
                                             e.currentTarget.style.transform = 'translateY(0)';
                                             e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.02)';
-                                            e.currentTarget.style.background = 'white';
+                                            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.5)';
                                         }}
                                     >
-                                        <td style={{...tableDataStyle, fontWeight: '600'}}>{meeting.title}</td>
+                                        <td style={{...tableDataStyle, fontWeight: '600', color: '#034FAF'}}>{meeting.title}</td>
                                         <td style={tableDataStyle}>{meeting.createdAt}</td>
                                         <td style={tableDataStyle}>{meeting.updatedAt}</td>
                                         <td style={{...tableDataStyle, textAlign: 'center'}}>
-                                            <ActionButton 
+                                            <ActionButton
                                                 onClick={(e) => handleEdit(e, meeting.id)}
-                                                color="#034FAF"
+                                                color="linear-gradient(45deg, #034FAF, #0367d4)"
                                             >
                                                 Edit
                                             </ActionButton>
                                         </td>
                                         <td style={{...tableDataStyle, textAlign: 'center'}}>
-                                            <ActionButton 
+                                            <ActionButton
                                                 onClick={(e) => handleDelete(e, meeting.title)}
-                                                color="#DC2626"
+                                                color="linear-gradient(45deg, #DC2626, #ef4444)"
                                             >
                                                 Delete
                                             </ActionButton>
@@ -239,15 +285,47 @@ const ConversationList = () => {
                         100% { background-position: 100% 100%; }
                     }
 
+                    @keyframes float {
+                        0% { transform: translateY(0) rotate(0deg); }
+                        50% { transform: translateY(-15px) rotate(5deg); }
+                        100% { transform: translateY(0) rotate(0deg); }
+                    }
+
+                    @keyframes shimmer {
+                        0% { opacity: 0.7; }
+                        50% { opacity: 0.9; }
+                        100% { opacity: 0.7; }
+                    }
+
+                    @keyframes fadeIn {
+                        from { opacity: 0; transform: translateY(10px); }
+                        to { opacity: 1; transform: translateY(0); }
+                    }
+
                     /* Hide scrollbar for Chrome, Safari and Opera */
                     *::-webkit-scrollbar {
                         display: none;
                     }
-                    
+
                     /* Hide scrollbar for IE, Edge and Firefox */
                     * {
                         -ms-overflow-style: none;  /* IE and Edge */
                         scrollbar-width: none;  /* Firefox */
+                    }
+
+                    /* Default cursor for text elements */
+                    h1, h2, h3, h4, h5, h6, p, span, div, section, label, th {
+                        cursor: default !important;
+                    }
+
+                    /* Ensure buttons and interactive elements have pointer cursor */
+                    button, a, .clickable, [role="button"], input[type="file"], input[type="submit"] {
+                        cursor: pointer !important;
+                    }
+
+                    /* Make table rows with pointer cursor */
+                    tr[onClick] {
+                        cursor: pointer !important;
                     }
                 `}
             </style>

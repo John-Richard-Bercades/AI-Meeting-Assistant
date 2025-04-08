@@ -50,7 +50,6 @@ const RecordSaved = () => {
       <Sidebar style={{ position: 'relative', zIndex: 2 }} />
 
       <div style={{ 
-        marginLeft: '460px',
         flex: 1, 
         display: 'flex', 
         flexDirection: 'column', 

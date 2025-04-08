@@ -277,6 +277,117 @@ app.post('/api/logout', (req, res) => {
   res.json({ status: 'success', message: 'Logged out successfully' });
 });
 
+// Get user profile endpoint
+app.get('/api/user/:userId', authenticateToken, async (req, res) => {
+  try {
+    // Get userId from the authenticated token
+    const authenticatedUserId = req.user.userId;
+    const requestedUserId = parseInt(req.params.userId);
+
+    // Check if the requested userId matches the authenticated user
+    if (authenticatedUserId !== requestedUserId) {
+      return res.status(403).json({
+        status: 'error',
+        error: 'Unauthorized access to other user\'s profile'
+      });
+    }
+
+    // Get user data
+    console.log('Fetching user data for ID:', authenticatedUserId);
+    const user = await userModel.getById(authenticatedUserId);
+    console.log('User data retrieved:', user ? 'Found' : 'Not found');
+
+    if (!user) {
+      return res.status(404).json({
+        status: 'error',
+        error: 'User not found'
+      });
+    }
+
+    // Don't return password
+    const { password, ...userWithoutPassword } = user;
+
+    res.json({
+      status: 'success',
+      user: userWithoutPassword
+    });
+  } catch (error) {
+    console.error('Get user profile error:', error);
+    res.status(500).json({
+      status: 'error',
+      error: error.message
+    });
+  }
+});
+
+// Update user profile endpoint
+app.put('/api/user/:userId', authenticateToken, async (req, res) => {
+  try {
+    // Get userId from the authenticated token
+    const authenticatedUserId = req.user.userId;
+    const requestedUserId = parseInt(req.params.userId);
+
+    // Check if the requested userId matches the authenticated user
+    if (authenticatedUserId !== requestedUserId) {
+      return res.status(403).json({
+        status: 'error',
+        error: 'Unauthorized access to other user\'s profile'
+      });
+    }
+
+    const { firstName, lastName, email, currentPassword, newPassword } = req.body;
+
+    // Check if user exists
+    const user = await userModel.getById(authenticatedUserId);
+    if (!user) {
+      return res.status(404).json({
+        status: 'error',
+        error: 'User not found'
+      });
+    }
+
+    // If changing password, verify current password
+    if (newPassword) {
+      if (!currentPassword) {
+        return res.status(400).json({
+          status: 'error',
+          error: 'Current password is required to change password'
+        });
+      }
+
+      const passwordMatch = await userModel.verifyPassword(authenticatedUserId, currentPassword);
+      if (!passwordMatch) {
+        return res.status(401).json({
+          status: 'error',
+          error: 'Current password is incorrect'
+        });
+      }
+    }
+
+    // Update user data
+    const updatedUser = await userModel.update(authenticatedUserId, {
+      firstName,
+      lastName,
+      email,
+      password: newPassword // Will only be updated if provided
+    });
+
+    // Don't return password
+    const { password, ...userWithoutPassword } = updatedUser;
+
+    res.json({
+      status: 'success',
+      user: userWithoutPassword
+    });
+  } catch (error) {
+    console.error('Update user profile error:', error);
+    res.status(500).json({
+      status: 'error',
+      error: error.message
+    });
+  }
+});
+
 // CSRF token endpoint
 app.get('/api/csrf-token', authenticateToken, csrfProtection, (req, res) => {
   res.json({ status: 'success', csrfToken: req.csrfToken() });

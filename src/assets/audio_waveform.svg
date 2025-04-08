@@ -1,0 +1,44 @@
+<svg width="200" height="60" viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+  <g fill="none" stroke="#FF5733" stroke-width="2" stroke-linecap="round">
+    <path d="M10,30 L10,20" />
+    <path d="M20,30 L20,15" />
+    <path d="M30,30 L30,10" />
+    <path d="M40,30 L40,20" />
+    <path d="M50,30 L50,25" />
+    <path d="M60,30 L60,5" />
+    <path d="M70,30 L70,15" />
+    <path d="M80,30 L80,20" />
+    <path d="M90,30 L90,10" />
+    <path d="M100,30 L100,5" />
+    <path d="M110,30 L110,15" />
+    <path d="M120,30 L120,10" />
+    <path d="M130,30 L130,20" />
+    <path d="M140,30 L140,15" />
+    <path d="M150,30 L150,5" />
+    <path d="M160,30 L160,20" />
+    <path d="M170,30 L170,15" />
+    <path d="M180,30 L180,10" />
+    <path d="M190,30 L190,20" />
+  </g>
+  <g fill="none" stroke="#FF5733" stroke-width="2" stroke-linecap="round">
+    <path d="M10,30 L10,40" />
+    <path d="M20,30 L20,45" />
+    <path d="M30,30 L30,50" />
+    <path d="M40,30 L40,40" />
+    <path d="M50,30 L50,35" />
+    <path d="M60,30 L60,55" />
+    <path d="M70,30 L70,45" />
+    <path d="M80,30 L80,40" />
+    <path d="M90,30 L90,50" />
+    <path d="M100,30 L100,55" />
+    <path d="M110,30 L110,45" />
+    <path d="M120,30 L120,50" />
+    <path d="M130,30 L130,40" />
+    <path d="M140,30 L140,45" />
+    <path d="M150,30 L150,55" />
+    <path d="M160,30 L160,40" />
+    <path d="M170,30 L170,45" />
+    <path d="M180,30 L180,50" />
+    <path d="M190,30 L190,40" />
+  </g>
+</svg>

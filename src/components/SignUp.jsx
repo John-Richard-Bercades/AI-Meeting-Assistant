@@ -184,12 +184,10 @@ const SignUp = () => {
         </main>
 
         <div className="action-buttons">
-          <div className="footer-left">
-            <button className="back-button" onClick={handleBack}>
-              <img src={backIcon} alt="Back" className="back-icon" />
-              <span>Back</span>
-            </button>
-          </div>
+          <button className="luxury-btn" onClick={handleBack}>
+            <img src={backIcon} alt="Back" className="back-icon" />
+            <span>Back to Home</span>
+          </button>
           <p className="footer-text">AI-Powered Meeting Assistant</p>
         </div>
       </div>
@@ -209,6 +207,7 @@ const SignUp = () => {
             right: 0;
             bottom: 0;
             background-color: #000;
+            padding-bottom: 60px; /* Add padding to account for footer height */
           }
 
           .luxury-bg {
@@ -239,6 +238,7 @@ const SignUp = () => {
             display: flex;
             flex-direction: column;
             flex: 1;
+            padding-bottom: 60px; /* Add padding to account for footer height */
           }
 
           .main-content {
@@ -246,8 +246,8 @@ const SignUp = () => {
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
-            padding-bottom: 100px;
+            padding: 20px 0 100px 0; /* Increased bottom padding for footer */
+            min-height: calc(100vh - 80px); /* Subtract footer height */
             overflow-y: auto;
           }
 
@@ -255,28 +255,32 @@ const SignUp = () => {
             background: rgba(56, 56, 56, 0.95);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 40px;
+            padding: 30px; /* Reduced padding */
             border-radius: 20px;
             width: 100%;
-            max-width: 800px;
+            max-width: 750px; /* Slightly reduced max-width */
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
             display: flex;
             flex-direction: column;
             align-items: center;
             box-sizing: border-box;
+            margin: 0 0 80px 0; /* Increased bottom margin to prevent overlap with footer */
+            position: relative;
+            z-index: 10;
+            transform: scale(0.95); /* Slightly scale down the entire form */
           }
 
           .app-logo {
-            width: 120px;
+            width: 100px; /* Smaller logo */
             height: auto;
-            margin-bottom: 20px;
+            margin-bottom: 15px; /* Reduced margin */
           }
 
           .form-title {
             color: white;
-            font-size: 2.4rem;
+            font-size: 2.2rem; /* Slightly smaller font */
             font-weight: 800;
-            margin-bottom: 35px;
+            margin-bottom: 25px; /* Reduced margin */
             text-align: center;
           }
 
@@ -284,13 +288,13 @@ const SignUp = () => {
             width: 100%;
             display: flex;
             flex-direction: column;
-            gap: 20px;
-            padding: 0 20px;
+            gap: 15px; /* Reduced gap */
+            padding: 0 15px; /* Reduced padding */
           }
 
           .input-row {
             display: flex;
-            gap: 20px;
+            gap: 15px; /* Reduced gap */
             width: 100%;
             margin: 0;
           }
@@ -304,21 +308,21 @@ const SignUp = () => {
           .input-group label {
             display: block;
             color: white;
-            margin-bottom: 8px;
+            margin-bottom: 6px; /* Reduced margin */
             font-weight: 500;
-            font-size: 0.9rem;
+            font-size: 0.85rem; /* Smaller font */
             letter-spacing: 0.5px;
             text-transform: uppercase;
           }
 
           .input-group input {
             width: 100%;
-            padding: 12px 16px;
+            padding: 10px 14px; /* Reduced padding */
             border: 2px solid rgba(255, 255, 255, 0.1);
             border-radius: 8px;
             background: rgba(255, 255, 255, 0.05);
             color: white;
-            font-size: 1rem;
+            font-size: 0.95rem; /* Smaller font */
             transition: all 0.3s ease;
             box-sizing: border-box;
           }
@@ -336,18 +340,18 @@ const SignUp = () => {
 
           .signup-btn {
             width: 100%;
-            padding: 16px;
+            padding: 12px; /* Reduced padding */
             background: linear-gradient(45deg, #034FAF, #57D7E2);
             color: white;
             border: none;
             border-radius: 12px;
-            font-size: 1.1rem;
+            font-size: 1rem; /* Smaller font */
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-top: 20px;
+            margin-top: 15px; /* Reduced margin */
           }
 
           .signup-btn:hover {
@@ -409,40 +413,63 @@ const SignUp = () => {
           }
 
           .action-buttons {
-            padding: 20px;
+            padding: 20px 30px;
             background: linear-gradient(45deg, #034FAF, #57D7E2);
             display: flex;
             align-items: center;
+            justify-content: space-between;
             box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.1);
-            border-radius: 30px 30px 0 0;
-            margin: 0 20px;
+            border-radius: 30px 30px 0 0; /* Curved top corners */
+            margin: 0 20px; /* Added margin to show the curved corners */
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
-            z-index: 10;
+            z-index: 5; /* Lower z-index so signup form can be above */
+            overflow: hidden; /* For the shimmer effect */
+            height: auto; /* Auto height based on content */
           }
 
-          .footer-left {
-            flex: 1;
+          .action-buttons::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: shine 3s infinite;
           }
 
-          .back-button {
-            background: rgba(255, 255, 255, 0.9);
+          .luxury-btn {
+            font-family: 'Montserrat', sans-serif;
+            padding: 12px 24px;
+            border-radius: 30px;
             border: none;
-            border-radius: 20px;
-            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #034FAF;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(5px);
+            position: relative;
+            overflow: hidden;
             display: flex;
             align-items: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            gap: 6px;
-            color: #034FAF;
-            font-weight: 500;
+            gap: 8px;
           }
 
-          .back-button:hover {
-            background: white;
+          .luxury-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            background: #034FAF;
+            color: white;
+            box-shadow: 0 8px 25px rgba(3, 79, 175, 0.3);
+          }
+
+          .luxury-btn:active {
             transform: translateY(-1px);
           }
 
@@ -453,12 +480,23 @@ const SignUp = () => {
           }
 
           .footer-text {
-            flex: 2;
             color: white;
-            font-size: 1rem;
+            font-size: 1.2rem;
             margin: 0;
             text-align: center;
-            font-weight: 500;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+          }
+
+          @keyframes backgroundShift {
+            0% { background-position: 0 0; }
+            100% { background-position: 100% 100%; }
+          }
+
+          @keyframes shine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
           }
 
           @media (max-width: 768px) {

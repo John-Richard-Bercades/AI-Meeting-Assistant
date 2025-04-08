@@ -20,9 +20,9 @@ async function startServer() {
     const dbConnected = await db.testConnection();
 
     if (dbConnected) {
-      console.log('Database connection successful');
+      console.log('Database connected successfully');
     } else {
-      console.warn('Warning: Database connection failed. Server will start but database features may not work.');
+      console.warn('WARNING: Database connection failed. Some features may not work properly.');
     }
 
     // Start the server

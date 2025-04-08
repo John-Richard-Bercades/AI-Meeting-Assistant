@@ -35,6 +35,73 @@ const userModel = {
     return users[0];
   },
 
+  // Find user by ID
+  async getById(userId) {
+    console.log('userModel.getById called with userId:', userId);
+    const sql = 'SELECT * FROM users WHERE id = ?';
+    try {
+      const users = await db.query(sql, [userId]);
+      console.log('Query result:', users ? `Found ${users.length} users` : 'No results');
+      return users[0];
+    } catch (error) {
+      console.error('Error in getById:', error);
+      throw error;
+    }
+  },
+
+  // Verify user password
+  async verifyPassword(userId, password) {
+    const user = await this.getById(userId);
+    if (!user) return false;
+    return await comparePassword(password, user.password);
+  },
+
+  // Update user data
+  async update(userId, userData) {
+    const { firstName, lastName, email, password } = userData;
+    let sql = 'UPDATE users SET ';
+    const params = [];
+    const updates = [];
+
+    if (firstName !== undefined) {
+      updates.push('first_name = ?');
+      params.push(firstName);
+    }
+
+    if (lastName !== undefined) {
+      updates.push('last_name = ?');
+      params.push(lastName);
+    }
+
+    if (email !== undefined) {
+      updates.push('email = ?');
+      params.push(email);
+    }
+
+    if (password) {
+      updates.push('password = ?');
+      params.push(await hashPassword(password));
+    }
+
+    if (updates.length === 0) {
+      // No updates to make
+      return await this.getById(userId);
+    }
+
+    sql += updates.join(', ') + ' WHERE id = ?';
+    params.push(userId);
+
+    try {
+      await db.query(sql, params);
+      return await this.getById(userId);
+    } catch (error) {
+      if (error.code === 'ER_DUP_ENTRY') {
+        throw new Error('Email already exists');
+      }
+      throw error;
+    }
+  },
+
   // Authenticate user
   async authenticate(username, password) {
     const user = await this.findByUsername(username);

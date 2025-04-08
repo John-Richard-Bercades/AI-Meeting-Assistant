@@ -19,12 +19,11 @@ const Minutes = () => {
       "Follow up with the client regarding the project requirements.",
       "Prepare a draft of the project plan.",
       "Schedule the next team meeting.",
-
     ],
     agenda: "Discuss the new project proposal, review the client's feedback, and assign tasks to team members."
   };
 
-  const handleDownload = async () => {
+  const generateDocx = async () => {
     // Create a new document
     const doc = new Document({
       sections: [
@@ -37,38 +36,29 @@ const Minutes = () => {
             }),
             new Paragraph({
               text: `Date and Time: ${minuteData.dateTime}`,
-              spacing: {
-                after: 200,
-              },
             }),
             new Paragraph({
               text: "Attendees:",
-              heading: HeadingLevel.HEADING_2,
             }),
             ...minuteData.attendees.map(
               (attendee) =>
                 new Paragraph({
-                  text: `• ${attendee}`,
+                  text: `- ${attendee}`,
                 })
             ),
             new Paragraph({
               text: "Agenda:",
-              heading: HeadingLevel.HEADING_2,
             }),
             new Paragraph({
               text: minuteData.agenda,
-              spacing: {
-                after: 200,
-              },
             }),
             new Paragraph({
               text: "Action Items:",
-              heading: HeadingLevel.HEADING_2,
             }),
             ...minuteData.actionItems.map(
               (item) =>
                 new Paragraph({
-                  text: `• ${item}`,
+                  text: `- ${item}`,
                 })
             ),
           ],
@@ -76,14 +66,20 @@ const Minutes = () => {
       ],
     });
 
-    // Save the document
+    // Generate the document as a blob
     const blob = await Packer.toBlob(doc);
+
+    // Create a URL for the blob
     const url = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
+
+    // Create a link element to trigger the download
+    const link = document.createElement("a");
     link.href = url;
-    link.download = 'minutes.docx';
+    link.download = "minutes.docx";
     document.body.appendChild(link);
     link.click();
+
+    // Clean up
     document.body.removeChild(link);
     window.URL.revokeObjectURL(url);
   };
@@ -97,7 +93,7 @@ const Minutes = () => {
       overflow: 'hidden'
     }}>
       {/* Background Pattern */}
-      <div style={{
+      <div className="background-pattern" style={{
         position: 'absolute',
         top: 0,
         left: 0,
@@ -112,45 +108,82 @@ const Minutes = () => {
       }} />
 
       {/* Gradient Overlay */}
-      <div style={{
+      <div className="gradient-overlay" style={{
         position: 'absolute',
         top: 0,
         left: 0,
         right: 0,
         bottom: 0,
-        background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(3, 79, 175, 0.2) 100%)',
+        background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(3, 79, 175, 0.25) 100%)',
         zIndex: 1,
+      }} />
+
+      {/* Decorative Elements */}
+      <div className="decorative-circle circle-1" style={{
+        position: 'absolute',
+        width: '400px',
+        height: '400px',
+        borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(3, 79, 175, 0.25) 0%, rgba(87, 215, 226, 0.12) 70%)',
+        top: '-150px',
+        right: '5%',
+        animation: 'float 15s ease-in-out infinite, shimmer 8s infinite',
+        zIndex: 1,
+        opacity: 0.7,
+        filter: 'blur(80px)',
+      }} />
+
+      <div className="decorative-circle circle-2" style={{
+        position: 'absolute',
+        width: '300px',
+        height: '300px',
+        borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(87, 215, 226, 0.25) 0%, rgba(3, 79, 175, 0.12) 70%)',
+        bottom: '5%',
+        left: '25%',
+        animation: 'float 12s ease-in-out infinite reverse, shimmer 10s infinite 2s',
+        zIndex: 1,
+        opacity: 0.7,
+        filter: 'blur(80px)',
       }} />
 
       <Sidebar style={{ position: 'relative', zIndex: 2 }} />
 
       {/* Main Content */}
       <div style={{
-        marginLeft: '320px',
         flex: 1,
-        padding: '30px 40px',
+        padding: '30px',
         height: '100vh',
-        overflow: 'hidden',
+        overflow: 'auto',
         position: 'relative',
         zIndex: 2,
+        msOverflowStyle: 'none',
+        scrollbarWidth: 'none',
       }}>
         {/* Header */}
         <div style={{
           display: 'flex',
           alignItems: 'center',
           marginBottom: '30px',
-          gap: '20px'
+          gap: '20px',
+          background: 'rgba(255, 255, 255, 0.15)',
+          padding: '15px 25px',
+          borderRadius: '15px',
+          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
+          border: '1px solid rgba(255, 255, 255, 0.25)',
+          transition: 'all 0.3s ease',
+          animation: 'fadeIn 0.8s ease-out',
         }}>
           <div style={{
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            padding: '15px',
+            padding: '12px',
             borderRadius: '50%',
             cursor: 'pointer',
             transition: 'all 0.3s ease',
-            width: '50px',
-            height: '50px',
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.transform = 'scale(1.05)';
@@ -166,27 +199,34 @@ const Minutes = () => {
               src={BackIcon}
               alt="back"
               style={{
-                width: '32px',
-                height: '32px',
-                transition: 'transform 0.3s ease'
+                width: '28px',
+                height: '28px',
+                transition: 'transform 0.3s ease',
+                cursor: 'pointer',
               }}
             />
           </div>
           <h1 style={{
             margin: 0,
-            fontSize: "28px",
+            fontSize: "24px",
             fontWeight: "900",
             color: '#034FAF',
-            letterSpacing: '0.5px'
+            letterSpacing: '0.5px',
+            cursor: 'default',
+            textShadow: '0 1px 3px rgba(255, 255, 255, 0.7)',
           }}>MINUTES OF THE MEETING</h1>
         </div>
 
-        {/* Content Container */}
+        {/* Content Section */}
         <div style={{
-          background: 'white',
-          borderRadius: '15px',
+          background: 'rgba(255, 255, 255, 0.15)',
           padding: '30px',
-          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)'
+          borderRadius: '15px',
+          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
+          border: '1px solid rgba(255, 255, 255, 0.25)',
+          marginBottom: '30px',
         }}>
           <div style={{ marginBottom: '30px' }}>
             <h2 style={{
@@ -194,12 +234,22 @@ const Minutes = () => {
               marginBottom: '15px',
               fontSize: '20px',
               fontWeight: '700',
-              letterSpacing: '0.5px'
+              letterSpacing: '0.5px',
+              cursor: 'default',
+              textShadow: '0 1px 3px rgba(255, 255, 255, 0.7)',
             }}>Date and Time</h2>
             <p style={{
               fontSize: '16px',
-              color: '#2c3e50',
-              lineHeight: '1.6'
+              color: '#333',
+              margin: '0',
+              padding: '12px 15px',
+              background: 'rgba(255, 255, 255, 0.5)',
+              borderRadius: '8px',
+              backdropFilter: 'blur(5px)',
+              WebkitBackdropFilter: 'blur(5px)',
+              border: '1px solid rgba(255, 255, 255, 0.3)',
+              cursor: 'default',
+              textShadow: '0 1px 2px rgba(255, 255, 255, 0.7)',
             }}>{minuteData.dateTime}</p>
           </div>
 
@@ -209,18 +259,28 @@ const Minutes = () => {
               marginBottom: '15px',
               fontSize: '20px',
               fontWeight: '700',
-              letterSpacing: '0.5px'
+              letterSpacing: '0.5px',
+              cursor: 'default',
+              textShadow: '0 1px 3px rgba(255, 255, 255, 0.7)',
             }}>Attendees</h2>
             <ul style={{
               paddingLeft: '20px',
-              margin: '0'
+              margin: '0',
+              background: 'rgba(255, 255, 255, 0.5)',
+              padding: '12px 15px 12px 35px',
+              borderRadius: '8px',
+              backdropFilter: 'blur(5px)',
+              WebkitBackdropFilter: 'blur(5px)',
+              border: '1px solid rgba(255, 255, 255, 0.3)',
             }}>
               {minuteData.attendees.map((attendee, index) => (
                 <li key={index} style={{
                   fontSize: '16px',
-                  color: '#2c3e50',
+                  color: '#333',
                   marginBottom: '8px',
-                  lineHeight: '1.6'
+                  lineHeight: '1.6',
+                  cursor: 'default',
+                  textShadow: '0 1px 2px rgba(255, 255, 255, 0.7)',
                 }}>{attendee}</li>
               ))}
             </ul>
@@ -232,12 +292,23 @@ const Minutes = () => {
               marginBottom: '15px',
               fontSize: '20px',
               fontWeight: '700',
-              letterSpacing: '0.5px'
+              letterSpacing: '0.5px',
+              cursor: 'default',
+              textShadow: '0 1px 3px rgba(255, 255, 255, 0.7)',
             }}>Agenda</h2>
             <p style={{
               fontSize: '16px',
-              color: '#2c3e50',
-              lineHeight: '1.6'
+              color: '#333',
+              margin: '0',
+              padding: '12px 15px',
+              background: 'rgba(255, 255, 255, 0.5)',
+              borderRadius: '8px',
+              backdropFilter: 'blur(5px)',
+              WebkitBackdropFilter: 'blur(5px)',
+              border: '1px solid rgba(255, 255, 255, 0.3)',
+              lineHeight: '1.6',
+              cursor: 'default',
+              textShadow: '0 1px 2px rgba(255, 255, 255, 0.7)',
             }}>{minuteData.agenda}</p>
           </div>
 
@@ -247,72 +318,123 @@ const Minutes = () => {
               marginBottom: '15px',
               fontSize: '20px',
               fontWeight: '700',
-              letterSpacing: '0.5px'
+              letterSpacing: '0.5px',
+              cursor: 'default',
+              textShadow: '0 1px 3px rgba(255, 255, 255, 0.7)',
             }}>Action Items</h2>
             <ul style={{
               paddingLeft: '20px',
-              margin: '0'
+              margin: '0',
+              background: 'rgba(255, 255, 255, 0.5)',
+              padding: '12px 15px 12px 35px',
+              borderRadius: '8px',
+              backdropFilter: 'blur(5px)',
+              WebkitBackdropFilter: 'blur(5px)',
+              border: '1px solid rgba(255, 255, 255, 0.3)',
             }}>
               {minuteData.actionItems.map((item, index) => (
                 <li key={index} style={{
                   fontSize: '16px',
-                  color: '#2c3e50',
+                  color: '#333',
                   marginBottom: '8px',
-                  lineHeight: '1.6'
+                  lineHeight: '1.6',
+                  cursor: 'default',
+                  textShadow: '0 1px 2px rgba(255, 255, 255, 0.7)',
                 }}>{item}</li>
               ))}
             </ul>
           </div>
 
-          <button
-            onClick={handleDownload}
-            style={{
-              backgroundColor: '#034FAF',
-              color: 'white',
-              border: 'none',
-              padding: '12px 24px',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              fontWeight: '600',
-              fontSize: '14px',
-              letterSpacing: '0.5px',
-              transition: 'all 0.3s ease',
-              boxShadow: '0 4px 6px rgba(3, 79, 175, 0.1)',
-              marginTop: '10px',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.boxShadow = '0 6px 12px rgba(3, 79, 175, 0.15)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = '0 4px 6px rgba(3, 79, 175, 0.1)';
-            }}
-          >
-            Download as Word Document
-          </button>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            marginTop: '20px',
+          }}>
+            <button
+              onClick={generateDocx}
+              style={{
+                padding: '12px 24px',
+                background: 'linear-gradient(45deg, #034FAF, #57D7E2)',
+                color: 'white',
+                border: 'none',
+                borderRadius: '8px',
+                fontWeight: '600',
+                fontSize: '16px',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+              }}
+              onMouseOver={(e) => {
+                e.target.style.background = 'linear-gradient(45deg, #0347A0, #4BC0CB)';
+                e.target.style.transform = 'translateY(-2px)';
+                e.target.style.boxShadow = '0 6px 8px rgba(0, 0, 0, 0.15)';
+              }}
+              onMouseOut={(e) => {
+                e.target.style.background = 'linear-gradient(45deg, #034FAF, #57D7E2)';
+                e.target.style.transform = 'translateY(0)';
+                e.target.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+              }}
+            >
+              Download as DOCX
+            </button>
+          </div>
         </div>
+
+        <style>
+          {`
+            @keyframes backgroundShift {
+              0% { background-position: 0 0; }
+              100% { background-position: 100% 100%; }
+            }
+
+            @keyframes float {
+              0% { transform: translateY(0) rotate(0deg); }
+              50% { transform: translateY(-15px) rotate(5deg); }
+              100% { transform: translateY(0) rotate(0deg); }
+            }
+
+            @keyframes shimmer {
+              0% { opacity: 0.7; }
+              50% { opacity: 0.9; }
+              100% { opacity: 0.7; }
+            }
+
+            @keyframes fadeIn {
+              from { opacity: 0; transform: translateY(10px); }
+              to { opacity: 1; transform: translateY(0); }
+            }
+
+            /* Hide scrollbar for Chrome, Safari and Opera */
+            *::-webkit-scrollbar {
+              display: none;
+            }
+
+            /* Hide scrollbar for IE, Edge and Firefox */
+            * {
+              -ms-overflow-style: none;  /* IE and Edge */
+              scrollbar-width: none;  /* Firefox */
+            }
+
+            /* Default cursor for text elements */
+            h1, h2, h3, h4, h5, h6, p, span, div, section, label, th {
+              cursor: default !important;
+            }
+
+            /* Ensure buttons and interactive elements have pointer cursor */
+            button, a, .clickable, [role="button"], input[type="file"], input[type="submit"] {
+              cursor: pointer !important;
+            }
+
+            /* Make table rows with pointer cursor */
+            tr[onClick] {
+              cursor: pointer !important;
+            }
+          `}
+        </style>
       </div>
-
-      <style>
-        {`
-          @keyframes backgroundShift {
-            0% { background-position: 0 0; }
-            100% { background-position: 100% 100%; }
-          }
-
-          /* Hide scrollbar for Chrome, Safari and Opera */
-          *::-webkit-scrollbar {
-            display: none;
-          }
-
-          /* Hide scrollbar for IE, Edge and Firefox */
-          * {
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
-          }
-        `}
-      </style>
     </div>
   );
 };
